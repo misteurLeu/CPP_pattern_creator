@@ -144,6 +144,14 @@ add_test(
 )
 
 add_test(
-    NAME initLoop
+    NAME ciede2000SameColor
     COMMAND ImageEditorTests 32
+)
+add_test(
+    NAME ciede2000DiffColors
+    COMMAND ImageEditorTests 33
+)
+add_test(
+    NAME ciede2000DiffColors2
+    COMMAND ImageEditorTests 34
 )

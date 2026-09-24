@@ -134,21 +134,18 @@ class TestPixels
             return 0;
         }
 
-        static int testInitLoop(int pixelNumberToInit)
-        {
-            for (int i=0; i < pixelNumberToInit; i++)
-            {
-                PixelColor _plop = PixelColor(std::make_tuple(10,25,90), 0.67, EColorType::RGB);
-            }
-            return 0;
-        }
-
-        static int testCiede20(
+        static int testCiede2000(
             PixelColor color1,
             PixelColor color2,
             double expected
         )
         {
+            double result = color1.ciede2000(color2);
+            if (std::abs(result - expected) > 0.0001)
+            {
+                std::cerr << "Ciede20 failed, colors1: "<< color1.toString() << ", color2: " << color2.toString() << ", expected: " << expected << " result is: " << result;
+                return 1;
+            }
             return 0;
         }
 
@@ -158,6 +155,12 @@ class TestPixels
             double expected
         )
         {
+            double result = color1.ciede94(color2);
+            if (std::abs(result - expected) > 0.0001)
+            {
+                std::cerr << "Ciede94 failed for colors, colors1: "<< color1.toString() << ", color2: " << color2.toString() << " , expected: " << expected << " result is: " << result;
+                return 1;
+            }
             return 0;
         }
 
@@ -168,6 +171,12 @@ class TestPixels
             double expected
         )
         {
+            double result = color1.euclidian(color2, weigthByAlpha);
+            if (std::abs(result - expected) > 0.0001)
+            {
+                std::cerr << "Euclidian failed for colors, colors1: "<< color1.toString() << ", color2: " << color2.toString() << " , expected: " << expected << " result is: " << result;
+                return 1;
+            }
             return 0;
         }
 };
@@ -501,8 +510,26 @@ int main(int argc, char* argv[])
                 PixelColor(std::make_tuple(208, 42, 253), 0.7, EColorType::RGB)
             );
         break;
-        case 32:// init 720p image
-            return TestPixels::testInitLoop(777600);
+        case 32:// ciede2000 same color
+            return TestPixels::testCiede2000(
+                PixelColor(std::make_tuple(47, 213, 2), 0.7, EColorType::RGB),
+                PixelColor(std::make_tuple(47, 213, 2), 0.7, EColorType::RGB),
+                0
+            );
+        break;
+        case 33:// ciede2000 same color
+            return TestPixels::testCiede2000(
+                PixelColor(std::make_tuple(56.7, 35.7, 1.8), 0.7, EColorType::LAB),
+                PixelColor(std::make_tuple(56.4, 30.4, -1.5), 0.7, EColorType::LAB),
+                2.9300
+            );
+        break;
+        case 34:// ciede2000 other color 2
+            return TestPixels::testCiede2000(
+                PixelColor(std::make_tuple(96.5, 47.8, 4.6), 0.7, EColorType::LAB),
+                PixelColor(std::make_tuple(96.8, 53.2, -4.1), 0.7, EColorType::LAB),
+                4.6680
+            );
         break;
 
         default:

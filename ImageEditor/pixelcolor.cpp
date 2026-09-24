@@ -352,6 +352,66 @@ PixelColor PixelColor::operator!()
 }
 
 // distance functions
-double ciede2000(PixelColor &other){return 0.0;}
-double ciede94(PixelColor &other){return 0.0;}
-double euclidian(PixelColor &other, bool weightByAlpha){return 0.0;}
+double PixelColor::ciede2000(PixelColor &other)
+{
+    // ciede2000 reimplemented from the sources find in https://ciede2000.pages-perso.free.fr/fr/cpp/
+    double l1 = std::get<0>(this->_lab);
+    double a1 = std::get<1>(this->_lab);
+    double b1 = std::get<2>(this->_lab);
+
+    double l2 = std::get<0>(other._lab);
+    double a2 = std::get<1>(other._lab);
+    double b2 = std::get<2>(other._lab);
+
+    const double k_l = 1.0;
+    const double k_c = 1.0;
+    const double k_h = 1.0;
+
+    double n = (std::sqrt(a1 * a1 + b1 * b1) + std::sqrt(a2 * a2 + b2 * b2)) * 0.5;
+    n = n * n * n * n * n * n * n;
+    n = 1.0 + 0.5 * (1.0 - std::sqrt(n / (n + 6103515625.0)));
+
+    double c1 = std::sqrt(a1 * a1 * n * n + b1 * b1);
+    double c2 = std::sqrt(a2 * a2 * n * n + b2 * b2);
+
+    double h1 = std::atan2(b1, a1 * n);
+    double h2 = std::atan2(b2, a2 * n);
+
+    h1 += (h1 < 0.0) * 2.0 * M_PI;
+    h2 += (h2 < 0.0) * 2.0 * M_PI;
+
+    n = std::fabs(h2 - h1);
+    if (M_PI - 1E-14 < n && n < M_PI + 1E-14)
+        n = M_PI;
+
+    double h_m = (h1 + h2) * 0.5;
+    double h_d = (h2 - h1) * 0.5;
+    h_d += (M_PI < n) * M_PI;
+    // simplification de la notation de sharma, la diff est de seulement ±0,0003
+    // version sharma: h_m += (M_PI < n) * ((h_m < M_PI) - (M_PI <= h_m)) * M_PI;
+    h_m += (M_PI < n) * M_PI;
+
+    double p = 36.0 * h_m - 55.0 * M_PI;
+    n = (c1 + c2) * 0.5;
+    n = n * n * n * n * n * n * n;
+
+    double r_t = -2.0 * std::sqrt(n / (n + 6103515625.0)) * std::sin(M_PI / 3.0 * std::exp(p * p / (-25.0 * M_PI * M_PI)));
+    n = (l1 + l2) * 0.5;
+    n = (n - 50.0) * (n - 50.0);
+
+    double l = (l2 - l1) / (k_l * (1.0 + 3.0 / 200.0 * n / std::sqrt(20.0 + n)));
+
+    double t = 1.0  + 6.0 / 25.0 * std::sin(2.0 * h_m + M_PI / 2.0)
+                    + 8.0 / 25.0 * std::sin(3.0 * h_m + 8.0 * M_PI / 15.0)
+                    - 17.0 / 100.0 * std::sin(h_m + M_PI / 3.0)
+                    - 1.0 / 5.0 * std::sin(4.0 * h_m + 3.0 * M_PI / 20.0);
+    n = c1 + c2;
+    //hue
+    double h = 2.0 * std::sqrt(c1 * c2) * std::sin(h_d) / (k_h * (1.0 + 3.0 / 400.0 * n * t));
+    // chroma
+    double c = (c2 - c1) / (k_c * (1.0 + 9.0 / 400 * n));
+
+    return std::sqrt(l * l + h * h + c * c + c * h * r_t);
+}
+double PixelColor::ciede94(PixelColor &other){return 0.0;}
+double PixelColor::euclidian(PixelColor &other, bool weightByAlpha){return 0.0;}

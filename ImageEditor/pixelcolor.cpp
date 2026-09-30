@@ -1,7 +1,7 @@
 #include "pixelcolor.h"
 #include <algorithm>
-#include <stdexcept>
 #include <string>
+#include <iostream>
 
 
 PixelColor::PixelColor(std::tuple<double, double, double> color, double alpha, EColorType type)
@@ -10,9 +10,11 @@ PixelColor::PixelColor(std::tuple<double, double, double> color, double alpha, E
     double color2 = std::get<1>(color);
     double color3 = std::get<2>(color);
 
+
     if (alpha < 0 || alpha > 1)
     {
-        throw std::runtime_error("alpha out of range, should be between 0 and 1, " + std::to_string(alpha) + "found");
+        std::cerr << "alpha out of range, should be between 0 and 1, " << std::to_string(alpha) << "found";
+        throw "alpha out of range, should be between 0 and 1, " + std::to_string(alpha) + "found";
     }
     this->_a = alpha;
     switch (type)
@@ -42,9 +44,12 @@ PixelColor::PixelColor(std::tuple<double, double, double> color, double alpha, E
             this->_lab = color;
             break;
         default:
-            throw std::runtime_error("color type" + colorsTypesNames[type] + "is not compatible with pixel color");
+            throw "color type" + colorsTypesNames[type] + "is not compatible with pixel color";
     }
 }
+
+PixelColor::~PixelColor()
+{}
 
 // conversion methods
 std::tuple<double, double, double> PixelColor::RGBtoHSL(int r, int g, int b)
@@ -65,7 +70,7 @@ std::tuple<double, double, double> PixelColor::RGBtoHSL(int r, int g, int b)
         if (x_max == b)
             return (double)(60.0 * ((r - g) / chroma + 4));
 
-        throw std::runtime_error("x_max does not match any of r, g or b values, it should never append");
+        throw "x_max does not match any of r, g or b values, it should never append";
     }();
 
     double S = (L == 0)? 0 : 1 - std::abs(2 * L - 1);
@@ -118,7 +123,7 @@ std::tuple<int, int, int> PixelColor::HSLtoRGB(double h, double s, double l)
     }
     else
     {
-        throw std::runtime_error("h is bigger than 360");
+        throw "h is bigger than 360";
     }
 
     r = (r + m) * 255;

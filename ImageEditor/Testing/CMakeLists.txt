@@ -5,153 +5,176 @@ project(Testing LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(ImageEditorTests test_pixel.cpp
-    test_pixel.cpp)
-
-target_link_libraries(ImageEditorTests PRIVATE ImageEditor)
+add_executable(testPixels test_pixel.cpp)
+target_link_libraries(testPixels PRIVATE ImageEditor)
 
 add_test(
     NAME RGBinitPixelBlack
-    COMMAND ImageEditorTests 1
+    COMMAND testPixels 1
 )
 add_test(
     NAME RGBinitPixelRed
-    COMMAND ImageEditorTests 2
+    COMMAND testPixels 2
 )
 add_test(
     NAME RGBinitPixelGreen
-    COMMAND ImageEditorTests 3
+    COMMAND testPixels 3
 )
 add_test(
     NAME RGBinitPixelBlue
-    COMMAND ImageEditorTests 4
+    COMMAND testPixels 4
 )
 add_test(
     NAME RGBinitPixelWhite
-    COMMAND ImageEditorTests 5
+    COMMAND testPixels 5
 )
-
 
 add_test(
     NAME HSLinitPixelBlack
-    COMMAND ImageEditorTests 6
+    COMMAND testPixels 6
 )
 add_test(
     NAME HSLinitPixelRed
-    COMMAND ImageEditorTests 7
+    COMMAND testPixels 7
 )
 add_test(
     NAME HSLinitPixelGreen
-    COMMAND ImageEditorTests 8
+    COMMAND testPixels 8
 )
 add_test(
     NAME HSLinitPixelBlue
-    COMMAND ImageEditorTests 9
+    COMMAND testPixels 9
 )
 add_test(
     NAME HSLinitPixelWhite
-    COMMAND ImageEditorTests 10
+    COMMAND testPixels 10
 )
 
 add_test(
     NAME XYZinitPixelBlack
-    COMMAND ImageEditorTests 11
+    COMMAND testPixels 11
 )
 add_test(
     NAME XYZinitPixelRed
-    COMMAND ImageEditorTests 12
+    COMMAND testPixels 12
 )
 add_test(
     NAME XYZinitPixelGreen
-    COMMAND ImageEditorTests 13
+    COMMAND testPixels 13
 )
 add_test(
     NAME XYZinitPixelBlue
-    COMMAND ImageEditorTests 14
+    COMMAND testPixels 14
 )
 add_test(
     NAME XYZinitPixelWhite
-    COMMAND ImageEditorTests 15
+    COMMAND testPixels 15
 )
 
 add_test(
     NAME LABinitPixelBlack
-    COMMAND ImageEditorTests 16
+    COMMAND testPixels 16
 )
 add_test(
     NAME LABinitPixelRed
-    COMMAND ImageEditorTests 17
+    COMMAND testPixels 17
 )
 add_test(
     NAME LABinitPixelGreen
-    COMMAND ImageEditorTests 18
+    COMMAND testPixels 18
 )
 add_test(
     NAME LABinitPixelBlue
-    COMMAND ImageEditorTests 19
+    COMMAND testPixels 19
 )
 add_test(
     NAME LABinitPixelWhite
-    COMMAND ImageEditorTests 20
+    COMMAND testPixels 20
 )
 
 add_test(
     NAME EqualOperatorEqual
-    COMMAND ImageEditorTests 21
+    COMMAND testPixels 21
 )
 add_test(
     NAME EqualOperatorNotEqual
-    COMMAND ImageEditorTests 22
+    COMMAND testPixels 22
 )
 
 add_test(
     NAME sumOperator
-    COMMAND ImageEditorTests 23
+    COMMAND testPixels 23
 )
 add_test(
     NAME sumOperatorZero
-    COMMAND ImageEditorTests 24
+    COMMAND testPixels 24
 )
 add_test(
     NAME sumOperatorOverflow
-    COMMAND ImageEditorTests 25
+    COMMAND testPixels 25
 )
 
 add_test(
     NAME subOperator
-    COMMAND ImageEditorTests 26
+    COMMAND testPixels 26
 )
 add_test(
     NAME subOperatorZero
-    COMMAND ImageEditorTests 27
+    COMMAND testPixels 27
 )
 add_test(
     NAME subOperatorNeg
-    COMMAND ImageEditorTests 28
+    COMMAND testPixels 28
 )
 
 add_test(
     NAME invertOperatorZero
-    COMMAND ImageEditorTests 29
+    COMMAND testPixels 29
 )
 add_test(
     NAME InvertOperatorMax
-    COMMAND ImageEditorTests 30
+    COMMAND testPixels 30
 )
 add_test(
     NAME invertOperator
-    COMMAND ImageEditorTests 31
+    COMMAND testPixels 31
 )
 
 add_test(
     NAME ciede2000SameColor
-    COMMAND ImageEditorTests 32
+    COMMAND testPixels 32
 )
 add_test(
     NAME ciede2000DiffColors
-    COMMAND ImageEditorTests 33
+    COMMAND testPixels 33
 )
 add_test(
     NAME ciede2000DiffColors2
-    COMMAND ImageEditorTests 34
+    COMMAND testPixels 34
+)
+
+add_executable(testImageEditor test_imageEditor.cpp)
+target_link_libraries(testImageEditor PRIVATE ImageEditor)
+
+add_custom_command(TARGET testImageEditor POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_CURRENT_SOURCE_DIR}/testImages"
+            "${CMAKE_CURRENT_BINARY_DIR}/testImages"
+)
+
+add_test(
+    NAME loadBlack
+    COMMAND testImageEditor 1
+)
+add_test(
+    NAME loadWhite
+    COMMAND testImageEditor 2
+)
+add_test(
+    NAME loadTransparent
+    COMMAND testImageEditor 3
+)
+add_test(
+    NAME loadMulticolor
+    COMMAND testImageEditor 4
 )

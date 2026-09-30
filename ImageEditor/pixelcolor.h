@@ -37,6 +37,7 @@ class IMAGEEDITOR_EXPORT PixelColor
 
     public:
         PixelColor(std::tuple<double, double, double> color, double alpha, EColorType type);
+        ~PixelColor();
 
     // conversion methods
         static std::tuple<double, double, double>RGBtoHSL(int r, int g, int b);

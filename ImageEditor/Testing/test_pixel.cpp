@@ -533,7 +533,7 @@ int main(int argc, char* argv[])
         break;
 
         default:
-            std::cerr << "Test #" << choice << "does not exists" << std::endl;
+            std::cerr << "Test #" << choice << " does not exists" << std::endl;
             return 1;
     }
 

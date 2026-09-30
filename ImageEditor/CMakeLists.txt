@@ -20,6 +20,7 @@ add_library(ImageEditor SHARED
 )
 
 target_link_libraries(ImageEditor PUBLIC Qt${QT_VERSION_MAJOR}::Core)
+target_link_libraries(ImageEditor PRIVATE SDL3_image::SDL3_image SDL3::SDL3)
 
 target_compile_definitions(ImageEditor PRIVATE IMAGEEDITOR_LIBRARY)
 

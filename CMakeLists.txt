@@ -45,6 +45,8 @@ install(TARGETS appCPP_pattern_creator
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-enable_testing()
+add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
+add_subdirectory(vendored/SDL_image EXCLUDE_FROM_ALL)
 
+enable_testing()
 add_subdirectory(ImageEditor)

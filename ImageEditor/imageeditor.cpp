@@ -25,10 +25,12 @@ ImageEditor ImageEditor::LoadFromFile(std::string file_path){
         std::cerr << "Error loading image " << file_path << " return null value" << std::endl;
         throw "Error while loading image";
     }
-    std::vector<PixelColor> pixels;
     int w = imageLoaded->w;
     int h = imageLoaded->h;
+    std::vector<PixelColor> pixels;
+    pixels.reserve(w * h);
 
+    std::cerr << "image loaded" << std::endl;
     if (w == 0 || h == 0)
         throw "Error while loading image, width or heigth are zero";
 
@@ -40,18 +42,22 @@ ImageEditor ImageEditor::LoadFromFile(std::string file_path){
 
     uint8_t* pixelsVal = static_cast<uint8_t*>(imageLoadedRGBA->pixels);
 
-    for (int i = 0; i < w * pitch; ++i)
+    std::cerr << "image datas w: " << w << " h: " << h << " pitch: " << pitch << std::endl;
+
+    std::cerr << "max vector size :" << pixels.max_size();
+
+    for (int i = 0; i < w * h; ++i)
     {
         int y = i / w;
         int x = i % w;
         int pixelPos = y * pitch + x * 4;
 
-
-        int r = (int)(pixelsVal[pixelPos]);
-        int g = (int)(pixelsVal[pixelPos + 1]);
-        int b = (int)(pixelsVal[pixelPos + 2]);
-        double a = (double)(pixelsVal[pixelPos + 3]) / 255.0;
-
+        int r, g, b = 0;
+        double a = 0;
+        r = (int)(pixelsVal[pixelPos]);
+        g = (int)(pixelsVal[pixelPos + 1]);
+        b = (int)(pixelsVal[pixelPos + 2]);
+        a = (double)(pixelsVal[pixelPos + 3]) / 255.0;
         pixels.push_back(PixelColor(std::make_tuple(r, g, b), a, EColorType::RGB));
     }
 

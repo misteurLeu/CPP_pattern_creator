@@ -61,6 +61,8 @@ class IMAGEEDITOR_EXPORT PixelColor
 
     //operators
         bool operator==(PixelColor &other);
+        bool operator<(PixelColor &other);
+        bool operator<(const PixelColor &other) const;
         PixelColor operator+(PixelColor &other);
         PixelColor operator-(PixelColor &other);
         PixelColor operator!();

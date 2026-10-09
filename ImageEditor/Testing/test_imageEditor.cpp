@@ -10,7 +10,7 @@ class TestImageEditor
 
         static int TestloadImage(std::string imagePath, ImageEditor expected)
         {
-            ImageEditor result = ImageEditor::LoadFromFile(imagePath);
+            ImageEditor result = ImageEditor(imagePath);
             int testFailed  = 0;
 
             if (expected != result)

@@ -309,6 +309,38 @@ bool PixelColor::operator==(PixelColor &other)
     return (this->_rgb == other._rgb && this->_a == other._a);
 }
 
+bool PixelColor::operator<(PixelColor &other)
+{
+    int r1 = std::get<0>(this->_rgb);
+    int g1 = std::get<1>(this->_rgb);
+    int b1 = std::get<2>(this->_rgb);
+
+    int r2 = std::get<0>(other._rgb);
+    int g2 = std::get<1>(other._rgb);
+    int b2 = std::get<2>(other._rgb);
+
+    int32_t color1 = b1 + (g1 << 8) + (r1 << 16) + ((int)(this->_a * 255) << 24);
+    int32_t color2 = b2 + (g2 << 8) + (r2 << 16) + ((int)(other._a * 255) << 24);
+
+    return (color1 < color2);
+}
+
+bool PixelColor::operator<(const PixelColor &other) const
+{
+    int r1 = std::get<0>(this->_rgb);
+    int g1 = std::get<1>(this->_rgb);
+    int b1 = std::get<2>(this->_rgb);
+
+    int r2 = std::get<0>(other._rgb);
+    int g2 = std::get<1>(other._rgb);
+    int b2 = std::get<2>(other._rgb);
+
+    int32_t color1 = b1 + (g1 << 8) + (r1 << 16) + ((int)(this->_a * 255) << 24);
+    int32_t color2 = b2 + (g2 << 8) + (r2 << 16) + ((int)(other._a * 255) << 24);
+
+    return (color1 < color2);
+}
+
 PixelColor PixelColor::operator+(PixelColor &other)
 {
     int r1 = std::get<0>(this->_rgb);
